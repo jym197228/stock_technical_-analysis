@@ -21,3 +21,17 @@ def three_days(data): # 判斷買進、賣出訊號
         else:
             output.append(0)
     return output
+
+
+def trading(output):
+    stock = []
+    for i in rannge(len(output)):
+        if i < 1:
+            stock.append(0)
+        elif a[i] == 0:
+            stock.append(stock[i - 1]) 
+        elif a[i] == 1:
+            stock.append(a[i])
+        elif a[i] == -1:
+            stock.append(a[i])
+    return stock
