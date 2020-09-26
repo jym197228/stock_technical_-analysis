@@ -1,3 +1,14 @@
+def read_file(filename):
+    prices = []
+    with open(filename, 'r') as f:
+        for line in f:
+            if 'Adj Close' in line:
+                continue
+            data = line.strip().split(',')
+            prices.append(data[5])
+    return prices
+
+
 def three_days(data): # 判斷買進、賣出訊號
     output = []
     for i in range(len(data)):
