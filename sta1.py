@@ -23,15 +23,31 @@ def three_days(data): # 判斷買進、賣出訊號
     return output
 
 
-def trading(output):
-    stock = []
+def trading_timing(output):
+    timing = []
     for i in rannge(len(output)):
         if i < 1:
-            stock.append(0)
+            timing.append(0)
         elif a[i] == 0:
-            stock.append(stock[i - 1]) 
+            timing.append(timing[i - 1]) 
         elif a[i] == 1:
-            stock.append(a[i])
+            timing.append(a[i])
         elif a[i] == -1:
-            stock.append(a[i])
-    return stock
+            timing.append(a[i])
+    return timing
+
+
+def owned_asset(timing, prices):
+    cash = 1000000
+    for i in range(len(timing)):
+        if timing[i] == 0:
+            continue
+        elif timing[i] == 1 and timing[i - 1] == 0:
+            cash = cash - prices[i] * 1000
+        elif timing[i] == -1 and timing[i - 1] == 0:
+            cash = cash + prices[i] * 1000
+    return cash
+
+
+
+
