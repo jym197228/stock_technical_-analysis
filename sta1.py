@@ -25,14 +25,14 @@ def three_days(data): # 判斷買進、賣出訊號
 
 def trading_timing(output):
     timing = []
-    for i in rannge(len(output)):
+    for i in range(len(output)):
         if i < 1:
             timing.append(0)
-        elif a[i] == 0:
+        elif i[i] == 0:
             timing.append(timing[i - 1]) 
-        elif a[i] == 1:
+        elif i[i] == 1:
             timing.append(a[i])
-        elif a[i] == -1:
+        elif i[i] == -1:
             timing.append(a[i])
     return timing
 
@@ -48,6 +48,12 @@ def owned_asset(timing, prices):
             cash = cash + prices[i] * 1000
     return cash
 
+def main():
+    prices = read_file('2330.csv')
+    output = three_days(prices)
+    timing = trading_timing(output)
+    cash = owned_asset(timing, prices)
+    roi = (1000000 - cash) / 1000000
+    print('投資報酬率為', roi, '%')
 
-
-
+main()
