@@ -37,20 +37,23 @@ def owned_stock(signal): # 將交易訊號轉換成股票擁有狀況
     return stock
 
 
-def calc_profit(stock, prices): # 計算利潤
+def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式來計算利潤
     profit = 0
+    entry = 0
     for i in range(len(stock)):
-        if stock[i] == 1:
+        if stock[i] == 0:
+            continue
+        elif stock[i] == 1:
             if stock[i - 1] == 0:
-                profit = profit - float(prices[i])
+                entry = float(prices[i])
             if stock[i - 1] == -1:
-                profit = profit - float(prices[i]) * 2
-        if stock[i] == -1:
+                profit += entry - float(prices[i])
+                entry = float(prices[i])
+        elif stock[i] == -1:
             if stock[i - 1] == 0:
-                profit = profit + float(prices[i])
+                entry = float(prices[i])
             if stock[i - 1] == 1:
-                profit = profit + float(prices[i]) * 2
-        profit = profit + float(stock[len(stock) - 1]) * float(prices[len(stock) - 1])
+                profit += float(prices[i]) - entry
     return profit * 1000
 
 
@@ -75,8 +78,10 @@ def main():
     prices = read_file('2330.csv')
     signal = three_days(prices)
     stock = owned_stock(signal)
+    
     profit = calc_profit(stock, prices)
-    print(profit)
+    print('完成投資後的總利潤為', profit, '元')
+    
     # cash = owned_cash(stock, prices)
     # print('完成投資後的總利潤為', cash - 1000000, '元')
     # roi = (cash - 1000000) / 1000000
