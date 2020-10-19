@@ -37,7 +37,24 @@ def owned_stock(signal): # 將交易訊號轉換成股票擁有狀況
     return stock
 
 
-def owned_cash(stock, prices): # 利用股票持有狀況來計算資金增減
+def calc_profit(stock, prices): # 計算利潤
+    profit = 0
+    for i in range(len(stock)):
+        if stock[i] == 1:
+            if stock[i - 1] == 0:
+                profit = profit - float(prices[i])
+            if stock[i - 1] == -1:
+                profit = profit - float(prices[i]) * 2
+        if stock[i] == -1:
+            if stock[i - 1] == 0:
+                profit = profit + float(prices[i])
+            if stock[i - 1] == 1:
+                profit = profit + float(prices[i]) * 2
+        profit = profit + float(stock[len(stock) - 1]) * float(prices[len(stock) - 1])
+    return profit * 1000
+
+
+def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算資金增減
     cash = 1000000
     for i in range(len(stock)):
         if stock[i] == 0:
@@ -58,10 +75,12 @@ def main():
     prices = read_file('2330.csv')
     signal = three_days(prices)
     stock = owned_stock(signal)
-    cash = owned_cash(stock, prices)
-    print('完成投資後的總利潤為', cash - 1000000, '元')
-    roi = (cash - 1000000) / 1000000
-    print('投資報酬率為', roi, '%')
+    profit = calc_profit(stock, prices)
+    print(profit)
+    # cash = owned_cash(stock, prices)
+    # print('完成投資後的總利潤為', cash - 1000000, '元')
+    # roi = (cash - 1000000) / 1000000
+    # print('投資報酬率為', roi, '%')
 
 
 main()
