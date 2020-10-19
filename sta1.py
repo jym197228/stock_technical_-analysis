@@ -50,7 +50,7 @@ def owned_cash(stock, prices): # 利用股票持有狀況來計算資金增減
             cash = cash - float(prices[i]) * 1000 * 2
         elif stock[i] == -1 and stock[i - 1] == 1:
             cash = cash + float(prices[i]) * 1000 * 2
-    cash = cash + float(prices[len(stock) - 1]) * float(stock[len(stock) - 1]) # 強制變現
+    cash = cash + float(prices[len(stock) - 1]) * float(stock[len(stock) - 1])*1000 # 強制變現
     return cash
 
 
