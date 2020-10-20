@@ -59,6 +59,7 @@ def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式�
                 entry = prices[i]
             if stock[i - 1] == 1:
                 profit += prices[i] - entry
+                entry = prices[i]
                 trade.append(profit)
     return trade, profit
 
