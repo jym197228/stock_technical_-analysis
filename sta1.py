@@ -74,6 +74,17 @@ def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算�
     return cash
 
 
+def trade_frequency(signal):
+    frequency = 0
+    for i in range(len(signal)):
+        if i == 0:
+            continue
+        elif signal[i] != signal[i - 1]:
+            frequency += 1
+    return frequency
+                    
+
+
 def main():
     prices = read_file('2330.csv')
     signal = three_days(prices)
@@ -81,11 +92,14 @@ def main():
     
     # profit = calc_profit(stock, prices)
     # print('完成投資後的總利潤為', profit, '元')
-    
+
     cash = owned_cash(stock, prices)
     print('完成投資後的總利潤為', cash - 1000000, '元')
     roi = (cash - 1000000) / 1000000
     print('投資報酬率為', roi, '%')   
+
+    frequency = trade_frequency(signal)
+    print('在此期間之總共交易次數為', frequency, '次。')
 
 
 main()
