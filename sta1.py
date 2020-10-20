@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+
+
 def read_file(filename): # 讀取檔案
     prices = []
     with open(filename, 'r') as f:
@@ -59,6 +62,7 @@ def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式�
                 trade.append(profit)
     return trade, profit
 
+
 def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算資金增減
     cash = 1000000
     for i in range(len(stock)):
@@ -76,6 +80,14 @@ def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算�
     return cash            
 
 
+def graphic(trade):
+    plt.plot(trade)
+    plt.xlabel('trades')
+    plt.ylabel('profits')
+    plt.show()
+
+
+
 def main():
     prices = read_file('2330.csv')
     signal = three_days(prices)
@@ -90,6 +102,8 @@ def main():
     # print('完成投資後的總利潤為', cash - 1000000, '元')
     # roi = (cash - 1000000) / 1000000
     # print('投資報酬率為', roi, '%')   
+    
+    graphic(trade)
 
 
 main()
