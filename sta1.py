@@ -74,12 +74,12 @@ def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算�
     return cash
 
 
-def trade_frequency(signal):
+def trade_frequency(stock):
     frequency = 0
-    for i in range(len(signal)):
+    for i in range(len(stock)):
         if i == 0:
             continue
-        elif signal[i] != signal[i - 1]:
+        elif stock[i] != stock[i - 1]:
             frequency += 1
     return frequency
                     
@@ -98,7 +98,7 @@ def main():
     roi = (cash - 1000000) / 1000000
     print('投資報酬率為', roi, '%')   
 
-    frequency = trade_frequency(signal)
+    frequency = trade_frequency(stock)
     print('在此期間之總共交易次數為', frequency, '次。')
 
 
