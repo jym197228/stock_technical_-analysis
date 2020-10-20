@@ -40,6 +40,7 @@ def owned_stock(signal): # 將交易訊號轉換成股票擁有狀況
 def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式來計算利潤
     profit = 0
     entry = 0
+    trade = []
     for i in range(len(stock)):
         if stock[i] == 0:
             continue
@@ -49,13 +50,14 @@ def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式�
             if stock[i - 1] == -1:
                 profit += entry - prices[i]
                 entry = prices[i]
+                trade.append(profit)
         elif stock[i] == -1:
             if stock[i - 1] == 0:
                 entry = prices[i]
             if stock[i - 1] == 1:
                 profit += prices[i] - entry
-    return profit * 1000
-
+                trade.append(profit)
+    return trade, profit
 
 def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算資金增減
     cash = 1000000
@@ -71,18 +73,7 @@ def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算�
         elif stock[i] == -1 and stock[i - 1] == 1:
             cash = cash + prices[i] * 1000 * 2
     cash = cash + prices[len(stock) - 1] * stock[len(stock) - 1] * 1000 # 強制變現
-    return cash
-
-
-def trade_frequency(stock):
-    frequency = 0
-    for i in range(len(stock)):
-        if i == 0:
-            continue
-        elif stock[i] != stock[i - 1]:
-            frequency += 1
-    return frequency
-                    
+    return cash            
 
 
 def main():
@@ -90,16 +81,15 @@ def main():
     signal = three_days(prices)
     stock = owned_stock(signal)
     
-    # profit = calc_profit(stock, prices)
-    # print('完成投資後的總利潤為', profit, '元')
+    outcome = calc_profit(stock, prices)
+    trade, profit = outcome
+    print('完成投資後的總利潤為', profit * 1000, '元。')
+    print('在此期間，總共進行了', len(trade), '次交易。')
 
-    cash = owned_cash(stock, prices)
-    print('完成投資後的總利潤為', cash - 1000000, '元')
-    roi = (cash - 1000000) / 1000000
-    print('投資報酬率為', roi, '%')   
-
-    frequency = trade_frequency(stock)
-    print('在此期間之總共交易次數為', frequency, '次。')
+    # cash = owned_cash(stock, prices)
+    # print('完成投資後的總利潤為', cash - 1000000, '元')
+    # roi = (cash - 1000000) / 1000000
+    # print('投資報酬率為', roi, '%')   
 
 
 main()
