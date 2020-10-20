@@ -5,7 +5,7 @@ def read_file(filename): # 讀取檔案
             if 'Adj Close' in line:
                 continue
             data = line.strip().split(',')
-            prices.append(data[5])
+            prices.append(float(data[5]))
     return prices
 
 
@@ -45,15 +45,15 @@ def calc_profit(stock, prices): # 由持有方向並且記錄進場價的方式�
             continue
         elif stock[i] == 1:
             if stock[i - 1] == 0:
-                entry = float(prices[i])
+                entry = prices[i]
             if stock[i - 1] == -1:
-                profit += entry - float(prices[i])
-                entry = float(prices[i])
+                profit += entry - prices[i]
+                entry = prices[i]
         elif stock[i] == -1:
             if stock[i - 1] == 0:
-                entry = float(prices[i])
+                entry = prices[i]
             if stock[i - 1] == 1:
-                profit += float(prices[i]) - entry
+                profit += prices[i] - entry
     return profit * 1000
 
 
@@ -63,14 +63,14 @@ def owned_cash(stock, prices): # 利用股票持有狀況以及本金來計算�
         if stock[i] == 0:
             continue
         elif stock[i] == 1 and stock[i - 1] == 0:
-            cash = cash - float(prices[i]) * 1000
+            cash = cash - prices[i] * 1000
         elif stock[i] == -1 and stock[i - 1] == 0:
-            cash = cash + float(prices[i]) * 1000
+            cash = cash + prices[i] * 1000
         elif stock[i] == 1 and stock[i - 1] == -1:
-            cash = cash - float(prices[i]) * 1000 * 2
+            cash = cash - prices[i] * 1000 * 2
         elif stock[i] == -1 and stock[i - 1] == 1:
-            cash = cash + float(prices[i]) * 1000 * 2
-    cash = cash + float(prices[len(stock) - 1]) * float(stock[len(stock) - 1])*1000 # 強制變現
+            cash = cash + prices[i] * 1000 * 2
+    cash = cash + prices[len(stock) - 1] * stock[len(stock) - 1] * 1000 # 強制變現
     return cash
 
 
@@ -79,13 +79,13 @@ def main():
     signal = three_days(prices)
     stock = owned_stock(signal)
     
-    profit = calc_profit(stock, prices)
-    print('完成投資後的總利潤為', profit, '元')
+    # profit = calc_profit(stock, prices)
+    # print('完成投資後的總利潤為', profit, '元')
     
-    # cash = owned_cash(stock, prices)
-    # print('完成投資後的總利潤為', cash - 1000000, '元')
-    # roi = (cash - 1000000) / 1000000
-    # print('投資報酬率為', roi, '%')
+    cash = owned_cash(stock, prices)
+    print('完成投資後的總利潤為', cash - 1000000, '元')
+    roi = (cash - 1000000) / 1000000
+    print('投資報酬率為', roi, '%')   
 
 
 main()
